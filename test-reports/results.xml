@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.008" timestamp="2024-09-27T09:42:28.105151-04:00" hostname="Nicks-Air.lan"><testcase classname="test_main" name="test_hello" time="0.000" /></testsuite></testsuites>

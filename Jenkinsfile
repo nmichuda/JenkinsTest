@@ -16,11 +16,11 @@ pipeline {
         stage('Set up Python Environment') {
             steps {
                 // Create virtual environment in workspace directory
-                sh '''
-                    python3 -m venv ${VENV_DIR}  // Create virtual environment inside workspace
-                    source ./${VENV_DIR}/bin/activate   // Activate the virtual environment
-                    pip install -r requirements.txt  // Install dependencies
-                '''
+                script {
+                    def venvDir = "${WORKSPACE}/venv"
+                    echo "Creating virtual environment in ${venvDir}"
+                    sh "python3 -m venv ${venvDir}" // Ensure this is executed
+                }
             }
         }
         

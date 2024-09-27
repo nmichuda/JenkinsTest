@@ -11,11 +11,7 @@ pipeline {
                 echo 'Repository checked out successfully.'
             }
         }
-        stage('Debug Environment Variables') {
-            steps {
-                sh 'printenv | grep PYTHON'
-            }
-        }
+
         
         stage('Set up Python Environment') {
             steps {

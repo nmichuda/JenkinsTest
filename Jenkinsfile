@@ -22,7 +22,7 @@ pipeline {
                 // Create virtual environment in workspace directory
                 sh '''
                     python3 -m venv ${VENV_DIR}  // Create virtual environment inside workspace
-                    . ${VENV_DIR}/bin/activate   // Activate the virtual environment
+                    source ./${VENV_DIR}/bin/activate   // Activate the virtual environment
                     pip install -r requirements.txt  // Install dependencies
                 '''
             }

@@ -2,35 +2,33 @@ pipeline {
     agent any
     
     environment {
-        VENV_DIR = 'venv'  // Define the virtual environment directory
+        VENV_DIR = "${WORKSPACE}/venv"  // Define the virtual environment directory inside the workspace
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // The default SCM checkout is already happening automatically,
-                // so no need to manually add another git checkout step here.
                 echo 'Repository checked out successfully.'
             }
         }
         
         stage('Set up Python Environment') {
             steps {
-                // Install Python virtual environment and dependencies
+                // Create virtual environment and install dependencies in the writable workspace directory
                 sh '''
                     python3 -m venv ${VENV_DIR}  // Create a virtual environment
-                    . ${VENV_DIR}/bin/activate    // Activate the virtual environment
-                    pip install -r requirements.txt  // Install dependencies from requirements.txt
+                    . ${VENV_DIR}/bin/activate   // Activate the virtual environment
+                    pip install -r requirements.txt  // Install dependencies
                 '''
             }
         }
         
         stage('Run Tests') {
             steps {
-                // Run pytest and generate test report
+                // Run pytest with JUnit test result output
                 sh '''
-                    . ${VENV_DIR}/bin/activate    // Activate virtual environment
-                    pytest --junitxml=test-reports/results.xml  // Run pytest and output JUnit report
+                    . ${VENV_DIR}/bin/activate   // Activate virtual environment
+                    pytest --junitxml=test-reports/results.xml  // Run pytest and output results
                 '''
             }
         }

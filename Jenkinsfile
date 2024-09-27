@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        VENV_DIR = "${WORKSPACE}/venv"  // Define the virtual environment directory inside the workspace
+        VENV_DIR = "${WORKSPACE}/venv"  // Always ensure the venv directory is inside the writable workspace
     }
 
     stages {
@@ -14,9 +14,9 @@ pipeline {
         
         stage('Set up Python Environment') {
             steps {
-                // Create virtual environment and install dependencies in the writable workspace directory
+                // Create virtual environment in workspace directory
                 sh '''
-                    python3 -m venv ${VENV_DIR}  // Create a virtual environment
+                    python3 -m venv ${VENV_DIR}  // Create virtual environment inside workspace
                     . ${VENV_DIR}/bin/activate   // Activate the virtual environment
                     pip install -r requirements.txt  // Install dependencies
                 '''
@@ -25,10 +25,10 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                // Run pytest with JUnit test result output
+                // Run pytest and generate JUnit report
                 sh '''
                     . ${VENV_DIR}/bin/activate   // Activate virtual environment
-                    pytest --junitxml=test-reports/results.xml  // Run pytest and output results
+                    pytest --junitxml=test-reports/results.xml  // Run pytest and store results
                 '''
             }
         }

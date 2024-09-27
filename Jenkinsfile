@@ -1,36 +1,52 @@
 pipeline {
     agent any
     
+    environment {
+        VENV_DIR = 'venv'  // Define the virtual environment directory
+    }
+
     stages {
         stage('Checkout') {
             steps {
+                // Clone the GitHub repository
                 git 'https://github.com/nmichuda/JenkinsTest.git'
             }
         }
         
-        stage('Install Dependencies') {
+        stage('Set up Python Environment') {
             steps {
-                sh 'python3 -m venv venv'
-                sh './venv/bin/pip install -r requirements.txt'
+                // Install Python virtual environment and dependencies
+                sh '''
+                    python3 -m venv ${VENV_DIR}  // Create a virtual environment
+                    . ${VENV_DIR}/bin/activate    // Activate the virtual environment
+                    pip install -r requirements.txt  // Install dependencies from requirements.txt
+                '''
             }
         }
         
         stage('Run Tests') {
             steps {
-                sh './venv/bin/python -m pytest'
+                // Run pytest and generate test report
+                sh '''
+                    . ${VENV_DIR}/bin/activate    // Activate virtual environment
+                    pytest --junitxml=test-reports/results.xml  // Run pytest and output JUnit report
+                '''
             }
         }
     }
-    
+
     post {
         always {
-            junit '**/test-reports/*.xml'  // Assuming pytest outputs JUnit XML reports
+            // Publish test results (JUnit format)
+            junit 'test-reports/results.xml'
         }
+        
         success {
-            echo 'Tests Passed!'
+            echo 'Build Passed: Tests executed successfully!'
         }
+        
         failure {
-            echo 'Tests Failed!'
+            echo 'Build Failed: One or more tests failed.'
         }
     }
 }

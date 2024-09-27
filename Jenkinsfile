@@ -8,8 +8,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone the GitHub repository
-                git 'https://github.com/nmichuda/JenkinsTest.git'
+                // The default SCM checkout is already happening automatically,
+                // so no need to manually add another git checkout step here.
+                echo 'Repository checked out successfully.'
             }
         }
         
